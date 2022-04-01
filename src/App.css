@@ -50,3 +50,8 @@ button:active {
 .request-info span {
     margin: 5px 0;
 }
+
+.image {
+    width: 500px;
+    height: 500px
+}

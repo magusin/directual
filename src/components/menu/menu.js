@@ -11,13 +11,10 @@ export function MainMenu() {
   return (
     <ul className="main-menu">
       <li>
-        <NavLink exact to="/">Get data</NavLink>
+        <NavLink exact to="/">Home</NavLink>
       </li>
       <li>
         <NavLink exact to="/page2">Post data</NavLink>
-      </li>
-      <li>
-        <NavLink exact to="/page3">Hidden content</NavLink>
       </li>
 
       {/* JSX visible for authorised users only */}

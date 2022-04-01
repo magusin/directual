@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Directual from 'directual-api';
 import { useAuth } from '../auth'
 import { Loader } from '../components/loader/loader';
+import {Card, CardBody, CardHeader, CardText, CardTitle, Container} from 'reactstrap'
 
 // Example of getting data from Directual
 
@@ -11,8 +12,8 @@ const api = new Directual({ apiHost: '/' })
 export default function Page1() {
 
   // API-endpoint details
-  const dataStructure = '' // todo: write here sysname of your data structure
-  const endpoint = '' // todo: write here Method name of your API-endpoint
+  const dataStructure = 'article' // todo: write here sysname of your data structure
+  const endpoint = 'getArticles' // todo: write here Method name of your API-endpoint
 
   // connect authentication context
   const auth = useAuth();
@@ -24,7 +25,7 @@ export default function Page1() {
   const [badRequest, setBadRequest] = useState(); // API error message
   const [pageLoading, setPageLoading] = useState(false); // paging loader
   const [pageNum, setPageNum] = useState(0); // Page number, by default = 0
-  const [pageSize, setPageSize] = useState(10); // Page size, bu default = 10
+  const [pageSize, setPageSize] = useState(2); // Page size, bu default = 10
 
   // Paging
   useEffect(() => {
@@ -68,21 +69,37 @@ export default function Page1() {
 
   return (
     <div className="content">
-      <h1>Example of getting data</h1>
+      <h1>Annonces</h1>
 
       {loading && <Loader />}
       {payload && !loading &&
         <div>
 
           {/* API response */}
-          <div className="request-info">
+          {/* <div className="request-info">
             <span>Data structure: <b>{dataStructure ? dataStructure : <span className="error">not provided</span>}</b></span>
             <span>API-endpoint: <b>{endpoint ? endpoint : <span className="error">not provided</span>}</b></span>
             <span>Payload: <code>{JSON.stringify(payload)}</code></span>
             <span>Payload info: <code>{JSON.stringify(pageInfo)}</code></span>
             {badRequest && <code className="error">Error: <b>{badRequest}</b></code>}
-          </div>
-
+          </div> */}
+          <Container>
+          {payload.map(data =>
+           <Card className='border-1 border-primary text-center mb-2 ' key={data.id}>
+             <CardHeader>
+               <CardTitle>
+               <h3 >{data.title}</h3>
+               </CardTitle>
+             </CardHeader>
+           <CardBody>
+           <img src={data.file} className='image'></img>
+           <CardText>
+             <p>{data.description}</p>
+           </CardText>
+           </CardBody>
+         </Card>
+            )}
+           </Container>
           {/* Paging */}
           {pageLoading && <Loader />}
           {!pageLoading &&
