@@ -25,7 +25,7 @@ export default function Page1() {
   const [badRequest, setBadRequest] = useState(); // API error message
   const [pageLoading, setPageLoading] = useState(false); // paging loader
   const [pageNum, setPageNum] = useState(0); // Page number, by default = 0
-  const [pageSize, setPageSize] = useState(2); // Page size, bu default = 10
+  const [pageSize] = useState(2); // Page size, bu default = 10
 
   // Paging
   useEffect(() => {

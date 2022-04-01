@@ -90,9 +90,6 @@ function App() {
           <Route exact path="/">
             <Page1 />
           </Route>
-          <Route exact path="/page2">
-            <Page2 />
-          </Route>
           
           {/* Pages for any authorised user */}
           <PrivateRoute path="/private">

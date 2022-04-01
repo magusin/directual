@@ -13,9 +13,6 @@ export function MainMenu() {
       <li>
         <NavLink exact to="/">Home</NavLink>
       </li>
-      <li>
-        <NavLink exact to="/page2">Post data</NavLink>
-      </li>
 
       {/* JSX visible for authorised users only */}
       {authContext.isAutorised() && <li>
