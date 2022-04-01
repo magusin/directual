@@ -5,13 +5,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
-  NavLink,
-  useHistory, useLocation,
+  Redirect
 } from 'react-router-dom'
 
 import { MainMenu } from './components/menu/menu'
-import { ProvideAuth, useAuth, authContext } from './auth'
+import { ProvideAuth, useAuth } from './auth'
 
 import Page1 from './pages/Page1'
 import PrivatePage from './pages/PrivatePage'

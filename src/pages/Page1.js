@@ -31,6 +31,7 @@ export default function Page1() {
   useEffect(() => {
     setPageLoading(true)
     getData()
+    // eslint-disable-next-line
   }, [pageNum])
 
   const nextPage = () => {
@@ -92,7 +93,7 @@ export default function Page1() {
                </CardTitle>
              </CardHeader>
            <CardBody>
-           <img src={data.file} className='image'></img>
+           <img alt='none' src={data.file} className='image'></img>
            <CardText>
              <p>{data.description}</p>
            </CardText>
