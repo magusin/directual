@@ -55,3 +55,7 @@ button:active {
     width: 500px;
     height: 500px
 }
+
+.disabled {
+    display: none;
+}
