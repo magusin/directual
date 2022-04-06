@@ -15,6 +15,7 @@ import Page1 from './pages/Page1'
 import PrivatePage from './pages/PrivatePage'
 import AdminPage from './pages/AdminPage'
 import LoginPage from './pages/login'
+import Detail from './pages/Page2'
 
 function PrivateRoute({ children, hasRole, ...rest }) {
   const auth = useAuth();
@@ -58,6 +59,9 @@ export default function App() {
           </Route>
           <Route exact path="/">
             <Page1 />
+          </Route>
+          <Route path="/product/:id">
+            <Detail />
           </Route>
           
           {/* Pages for any authorised user */}

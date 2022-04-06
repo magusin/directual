@@ -10,6 +10,7 @@ import {
   CardTitle,
   Container
 } from 'reactstrap'
+import { Link } from 'react-router-dom'
 
 // Example of getting data from Directual
 
@@ -49,9 +50,9 @@ export default function Page1() {
     setPageNum(pageNum - 1)
   }
   const actualPage = () => {
-     setPageLoading(true)
-     setPageNum(pageNum === i)
-   }
+    setPageLoading(true)
+    setPageNum(pageNum === i)
+  }
   console.log(pageInfo)
   // GET-request
   function getData() {
@@ -84,8 +85,12 @@ export default function Page1() {
 
   let items = []
 
-  for ( var i = 1; i <= pageInfo.totalPage; i ++) {
-    items.push(<button onClick={actualPage} key={i}>{i}</button>)
+  for (var i = 1; i <= pageInfo.totalPage; i++) {
+    items.push(
+      <button onClick={actualPage} key={i}>
+        {i}
+      </button>
+    )
   }
 
   return (
@@ -97,31 +102,64 @@ export default function Page1() {
         <div>
           {/* API response */}
           <div className="request-info">
-            <span>Data structure: <b>{dataStructure ? dataStructure : <span className="error">not provided</span>}</b></span>
-            <span>API-endpoint: <b>{endpoint ? endpoint : <span className="error">not provided</span>}</b></span>
-            <span>Payload: <code>{JSON.stringify(payload)}</code></span>
-            <span>Payload info: <code>{JSON.stringify(pageInfo)}</code></span>
-            {badRequest && <code className="error">Error: <b>{badRequest}</b></code>}
+            <span>
+              Data structure:{' '}
+              <b>
+                {dataStructure ? (
+                  dataStructure
+                ) : (
+                  <span className="error">not provided</span>
+                )}
+              </b>
+            </span>
+            <span>
+              API-endpoint:{' '}
+              <b>
+                {endpoint ? (
+                  endpoint
+                ) : (
+                  <span className="error">not provided</span>
+                )}
+              </b>
+            </span>
+            <span>
+              Payload: <code>{JSON.stringify(payload)}</code>
+            </span>
+            <span>
+              Payload info: <code>{JSON.stringify(pageInfo)}</code>
+            </span>
+            {badRequest && (
+              <code className="error">
+                Error: <b>{badRequest}</b>
+              </code>
+            )}
           </div>
           <Container>
             {payload.map((data) => (
-              <Card
-                className="border-1 border-primary text-center mb-2 "
-                key={data.id}
+              <Link
+                to={{
+                  pathname: `/product/${data.id}`,
+                  state: { data: data.id }
+                }}
               >
-                <CardHeader>
-                  <CardTitle>
-                    <h3>{data.title}</h3>
-                  </CardTitle>
-                </CardHeader>
-                <CardBody>
-                  {/* <img alt='none' src={data.file} className='image'></img> */}
-                  <CardText>
-                    <p>{data.description}</p>
-                  </CardText>
-                  <p>{data.company}</p>
-                </CardBody>
-              </Card>
+                <Card
+                  className="border-1 border-primary text-center mb-2 "
+                  key={data.id}
+                >
+                  <CardHeader>
+                    <CardTitle>
+                      <h3>{data.title}</h3>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardBody>
+                    {/* <img alt='none' src={data.file} className='image'></img> */}
+                    <CardText>
+                      <p>{data.description}</p>
+                    </CardText>
+                    <p>{data.company}</p>
+                  </CardBody>
+                </Card>
+              </Link>
             ))}
           </Container>
           {/* Paging */}
@@ -134,9 +172,19 @@ export default function Page1() {
             <div>
               <nav>
                 <ul id="pagination">
-                  <button class={(pageNum <= 0) ? "disabled" : ""} onClick={prevPage}>Précédent</button>
+                  <button
+                    className={pageNum <= 0 ? 'disabled' : ''}
+                    onClick={prevPage}
+                  >
+                    Précédent
+                  </button>
                   {items}
-                  <button class={(pageNum >= pageInfo.totalPage - 1) ? "disabled" : ""} onClick={nextPage}>Suivant</button>
+                  <button
+                    className={pageNum >= pageInfo.totalPage - 1 ? 'disabled' : ''}
+                    onClick={nextPage}
+                  >
+                    Suivant
+                  </button>
                 </ul>
               </nav>
             </div>
