@@ -152,7 +152,7 @@ export default function Page1() {
                     </CardTitle>
                   </CardHeader>
                   <CardBody>
-                    {/* <img alt='none' src={data.file} className='image'></img> */}
+                    <img alt='none' src={data.file} className='image'></img>
                     <CardText>
                       <p>{data.description}</p>
                     </CardText>

@@ -22,7 +22,7 @@ export default function AdminPage () {
   const [badRequest, setBadRequest] = useState(); // API error message
   const [loading, setLoading] = useState(false); // Loader
   const [showForm, setShowForm] = useState(true); // Show/hide the form
-  const [formPayload, setFormPayload] = useState({}); // Data to send. Here we can add userID: auth.user by default
+  const [formPayload, setFormPayload] = useState(); // Data to send. Here we can add userID: auth.user by default
 
   // Reset the form
   const resetForm = () => {
@@ -30,7 +30,7 @@ export default function AdminPage () {
     setStatus()
     setBadRequest()
     setShowForm(true)
-    setFormPayload({}) // Don't forget to include userID: auth.user, if needed
+    setFormPayload({userID: auth.user}) // Don't forget to include userID: auth.user, if needed
   }
 
   // POST-request
@@ -59,12 +59,31 @@ export default function AdminPage () {
       })
   }
 
+   function uploadAction() {
+     var data = new FormData();
+     var imagedata = document.querySelector('input[type="file"]').files[0];
+     data.append("data", imagedata);
+     fetch("https://api.directual.com/good/api/v5/data/product/postProduct?appID=?&sessionID", {
+       mode: 'no-cors',
+       method: "POST",
+       body: data
+     }).then(function (res) {
+       if (res.ok) {
+         alert("Perfect! ");
+       } else if (res.status === 401) {
+         alert("Oops! ");
+       }
+     }, function (e) {
+       alert("Error submitting form!");
+     });
+   }
+
   return (
     <div className="content">
       <h1>Example of posting data</h1>
       {loading && <Loader />}
       {showForm &&
-        <form onSubmit={postData} enctype="multipart/form-data">
+        <form onSubmit={postData} encType="multipart/form-data">
           <input type="text" placeholder='Titre' onChange={(e) => {
             setFormPayload({ ...formPayload, 'title': e.target.value })
           }} />
@@ -77,7 +96,7 @@ export default function AdminPage () {
            <input type="file" placeholder='File' onChange={(e) => {
             setFormPayload({ ...formPayload, 'file': e.target.value })
           }} />
-          <button type="submit">Submit</button>
+          <button type="submit" onClick={uploadAction.bind()}>Submit</button>
         </form>
       }
 

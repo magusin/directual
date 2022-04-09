@@ -69,8 +69,6 @@ const Page2 = () => {
 
   return (
     <div className="content">
-      <h1>Produits et services</h1>
-
       {loading && <Loader />}
       {payload && !loading && (
         <div>
