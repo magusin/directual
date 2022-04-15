@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Checkbox } from 'react'
 import Directual from 'directual-api'
 import { useAuth } from '../auth'
 import { Loader } from '../components/loader/loader'
@@ -10,7 +10,7 @@ import {
   CardTitle,
   Container
 } from 'reactstrap'
-import {useParams} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 // Example of getting data from Directual
 
@@ -18,7 +18,7 @@ import {useParams} from 'react-router-dom'
 const api = new Directual({ apiHost: '/' })
 
 const Page2 = () => {
-  const {id} = useParams()
+  const { id } = useParams()
   // API-endpoint details
   const dataStructure = 'product' // todo: write here sysname of your data structure
   const endpoint = 'getProduct' // todo: write here Method name of your API-endpoint
@@ -32,16 +32,19 @@ const Page2 = () => {
   const [loading, setLoading] = useState(true) // initial loader
   const [badRequest, setBadRequest] = useState() // API error message
   const [pageSize] = useState(2) // Page size, bu default = 10
+  const [formPayload, setFormPayload] = useState({}) // Data to send. Here we can add userID: auth.user by default
+  const [response, setResponse] = useState() // API response
+  const [status, setStatus] = useState() // Request status
+  const [showForm, setShowForm] = useState(true) // Show/hide the form
 
   // Paging
   useEffect(() => {
-    
-    getData((id))
+    getData(id)
     // eslint-disable-next-line
   }, [])
-   
+
   // GET-request
-  function getData() {
+  function getData(id) {
     api
       // Data structure
       .structure(dataStructure)
@@ -66,7 +69,53 @@ const Page2 = () => {
         setBadRequest(e.response.status + ', ' + e.response.data.msg)
       })
   }
+  console.log(payload)
+  // POST-request
+  function postData() {
+     setLoading(true)
+     setShowForm(false)
+     api
+       // Data structure
+       .structure(dataStructure)
+       // POST request + payload + query params:
+       .setData(endpoint, formPayload, { sessionID: auth.sessionID, id: payload.id })
+       .then((response) => {
+         setResponse(response.result)
+         setStatus(response.status)
+         setLoading(false)
+       })
+       .catch((e) => {
+         // handling errors
+         setLoading(false)
+         console.log(e.response)
+         setBadRequest({
+           httpCode: e.response.status,
+           msg: e.response.data.msg
+         })
+       })
+   }
 
+  function update(e) {
+    e.prevent.Default()
+    let fetchData = fetch(
+      `https://api.directual.com/good/api/v5/data/product/getProduct?appID=445e7531-8fc5-44ad-9402-2668a9bf7365&id=35ceda16-d830-4cf0-80c5-cad845aa6ed0`,
+      {
+        method: 'POST',
+        body: {
+          
+            "title": "testtrue",
+            "id": "a8307f68-b96c-4055-9197-8d3f4a7e0bd9"
+        
+        },
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).then((res) => {
+      console.log(res.json())
+    })
+    console.log(fetchData)
+  }
   return (
     <div className="content">
       {loading && <Loader />}
@@ -74,11 +123,37 @@ const Page2 = () => {
         <div>
           {/* API response */}
           <div className="request-info">
-            <span>Data structure: <b>{dataStructure ? dataStructure : <span className="error">not provided</span>}</b></span>
-            <span>API-endpoint: <b>{endpoint ? endpoint : <span className="error">not provided</span>}</b></span>
-            <span>Payload: <code>{JSON.stringify(payload)}</code></span>
-            <span>Payload info: <code>{JSON.stringify(pageInfo)}</code></span>
-            {badRequest && <code className="error">Error: <b>{badRequest}</b></code>}
+            <span>
+              Data structure:{' '}
+              <b>
+                {dataStructure ? (
+                  dataStructure
+                ) : (
+                  <span className="error">not provided</span>
+                )}
+              </b>
+            </span>
+            <span>
+              API-endpoint:{' '}
+              <b>
+                {endpoint ? (
+                  endpoint
+                ) : (
+                  <span className="error">not provided</span>
+                )}
+              </b>
+            </span>
+            <span>
+              Payload: <code>{JSON.stringify(payload)}</code>
+            </span>
+            <span>
+              Payload info: <code>{JSON.stringify(pageInfo)}</code>
+            </span>
+            {badRequest && (
+              <code className="error">
+                Error: <b>{badRequest}</b>
+              </code>
+            )}
           </div>
           <Container>
             {payload.map((data) => (
@@ -92,12 +167,27 @@ const Page2 = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardBody>
-                  {/* <img alt='none' src={data.file} className='image'></img> */}
+                  <img alt="none" src={data.file} className="image"></img>
                   <CardText>
                     <p>{data.description}</p>
                   </CardText>
                   <p>{data.company}</p>
                 </CardBody>
+                {showForm && (
+                  <form onSubmit={update}>
+                    <button
+                      onClick={(e) => {
+                        setFormPayload({
+                          ...formPayload,
+                          title: e.target.value
+                        })
+                      }}
+                      type="submit"
+                    >
+                      Ajouter à mon profil{' '}
+                    </button>
+                  </form>
+                )}
               </Card>
             ))}
           </Container>
@@ -107,4 +197,4 @@ const Page2 = () => {
   )
 }
 
-export default Page2;
+export default Page2

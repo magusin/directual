@@ -38,7 +38,6 @@ export default function Page1() {
   useEffect(() => {
     setPageLoading(true)
     getData()
-    // eslint-disable-next-line
   }, [pageNum])
 
   const nextPage = () => {
@@ -51,7 +50,8 @@ export default function Page1() {
   }
   const actualPage = () => {
     setPageLoading(true)
-    setPageNum(pageNum === i)
+    setPageNum(pageNum = i)
+    console.log(i)
   }
   console.log(pageInfo)
   // GET-request
@@ -81,6 +81,28 @@ export default function Page1() {
         console.log(e.response)
         setBadRequest(e.response.status + ', ' + e.response.data.msg)
       })
+  }
+
+  function getData2() {
+    fetch('https://api.directual.com/good/api/v5/data/product/getProducts?appID=445e7531-8fc5-44ad-9402-2668a9bf7365', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then((res) => {
+      setPayload(res.payload)
+      setPageInfo(res.pageInfo)
+      setLoading(false)
+      setPageLoading(false)
+    })
+    .catch((e) => {
+      // handling errors
+      setLoading(false)
+      setPageLoading(false)
+      console.log(e.res)
+      setBadRequest(e.res.status + ', ' + e.res.data.msg)
+    })
   }
 
   let items = []
@@ -152,7 +174,7 @@ export default function Page1() {
                     </CardTitle>
                   </CardHeader>
                   <CardBody>
-                    <img alt='none' src={data.file} className='image'></img>
+                    <img alt="none" src={data.file} className="image"></img>
                     <CardText>
                       <p>{data.description}</p>
                     </CardText>
@@ -178,9 +200,22 @@ export default function Page1() {
                   >
                     Précédent
                   </button>
-                  {items}
+                  {/* {items } */}
+                  {(function () {
+                    let items = []
+                    for (var i = 1; i <= pageInfo.totalPage; i++) {
+                      items.push(
+                        <button onClick={actualPage} key={i}>
+                          {i}
+                        </button>
+                      )
+                    }
+                    return items
+                  })()}
                   <button
-                    className={pageNum >= pageInfo.totalPage - 1 ? 'disabled' : ''}
+                    className={
+                      pageNum >= pageInfo.totalPage - 1 ? 'disabled' : ''
+                    }
                     onClick={nextPage}
                   >
                     Suivant
