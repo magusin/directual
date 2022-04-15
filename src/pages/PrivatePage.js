@@ -29,7 +29,7 @@ export default function PrivatePage () {
     const [pageInfo, setPageInfo] = useState({}) // API response metadata, e.g. number of objects
     const [loading, setLoading] = useState(true) // initial loader
     const [badRequest, setBadRequest] = useState() // API error message
-    const [pageSize] = useState(2) // Page size, bu default = 10
+    const [pageSize] = useState(5) // Page size, bu default = 10
   
      // Paging
   useEffect(() => {

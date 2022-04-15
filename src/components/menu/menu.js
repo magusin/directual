@@ -38,11 +38,11 @@ export function MainMenu() {
     // </ul>
     <Nav pills className="position-relative">
       <NavItem>
-        <NavLink href="/">Home</NavLink>
+        <NavLink exact='true' href="/">Home</NavLink>
       </NavItem>
       <NavItem>
         {authContext.hasRole('admin') && (
-          <NavLink exact href="/admin">
+          <NavLink href="/admin">
             Admin Page
           </NavLink>
         )}

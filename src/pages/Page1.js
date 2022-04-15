@@ -48,12 +48,10 @@ export default function Page1() {
     setPageLoading(true)
     setPageNum(pageNum - 1)
   }
-  const actualPage = () => {
+  const actualPage = (i) => {
     setPageLoading(true)
-    setPageNum(pageNum = i)
-    console.log(i)
+    setPageNum(i)
   }
-  console.log(pageInfo)
   // GET-request
   function getData() {
     api
@@ -105,16 +103,6 @@ export default function Page1() {
     })
   }
 
-  let items = []
-
-  for (var i = 1; i <= pageInfo.totalPage; i++) {
-    items.push(
-      <button onClick={actualPage} key={i}>
-        {i}
-      </button>
-    )
-  }
-
   return (
     <div className="content">
       <h1>Produits et services</h1>
@@ -158,7 +146,7 @@ export default function Page1() {
           </div>
           <Container>
             {payload.map((data) => (
-              <Link
+              <Link key={data.id}
                 to={{
                   pathname: `/product/${data.id}`,
                   state: { data: data.id }
@@ -176,9 +164,9 @@ export default function Page1() {
                   <CardBody>
                     <img alt="none" src={data.file} className="image"></img>
                     <CardText>
-                      <p>{data.description}</p>
+                      {data.description}
+                      {data.company}
                     </CardText>
-                    <p>{data.company}</p>
                   </CardBody>
                 </Card>
               </Link>
@@ -200,18 +188,15 @@ export default function Page1() {
                   >
                     Précédent
                   </button>
-                  {/* {items } */}
-                  {(function () {
-                    let items = []
-                    for (var i = 1; i <= pageInfo.totalPage; i++) {
-                      items.push(
-                        <button onClick={actualPage} key={i}>
-                          {i}
+                  {Array.from(Array(pageInfo.totalPage).keys()).map(
+                    (page, i) => {
+                      return (
+                        <button onClick={() => actualPage(i)} key={i}>
+                          {i + 1}
                         </button>
-                      )
+                      );
                     }
-                    return items
-                  })()}
+                  )}
                   <button
                     className={
                       pageNum >= pageInfo.totalPage - 1 ? 'disabled' : ''

@@ -72,47 +72,48 @@ const Page2 = () => {
   console.log(payload)
   // POST-request
   function postData() {
-     setLoading(true)
-     setShowForm(false)
-     api
-       // Data structure
-       .structure(dataStructure)
-       // POST request + payload + query params:
-       .setData(endpoint, formPayload, { sessionID: auth.sessionID, id: payload.id })
-       .then((response) => {
-         setResponse(response.result)
-         setStatus(response.status)
-         setLoading(false)
-       })
-       .catch((e) => {
-         // handling errors
-         setLoading(false)
-         console.log(e.response)
-         setBadRequest({
-           httpCode: e.response.status,
-           msg: e.response.data.msg
-         })
-       })
-   }
+    setLoading(true)
+    setShowForm(false)
+    api
+      // Data structure
+      .structure(dataStructure)
+      // POST request + payload + query params:
+      .setData(endpoint, formPayload, {
+        sessionID: auth.sessionID,
+        id: payload.id
+      })
+      .then((response) => {
+        setResponse(response.result)
+        setStatus(response.status)
+        setLoading(false)
+      })
+      .catch((e) => {
+        // handling errors
+        setLoading(false)
+        console.log(e.response)
+        setBadRequest({
+          httpCode: e.response.status,
+          msg: e.response.data.msg
+        })
+      })
+  }
 
   function update(e) {
-    e.prevent.Default()
+    e.preventDefault()
     let fetchData = fetch(
       `https://api.directual.com/good/api/v5/data/product/getProduct?appID=445e7531-8fc5-44ad-9402-2668a9bf7365&id=35ceda16-d830-4cf0-80c5-cad845aa6ed0`,
       {
         method: 'POST',
-        body: {
-          
-            "title": "testtrue",
-            "id": "a8307f68-b96c-4055-9197-8d3f4a7e0bd9"
-        
-        },
+        body: JSON.stringify({
+          is_selected: true,
+          id: id
+        }),
         headers: {
           'Content-Type': 'application/json'
         }
       }
     ).then((res) => {
-      console.log(res.json())
+      getData(id)
     })
     console.log(fetchData)
   }
@@ -169,18 +170,18 @@ const Page2 = () => {
                 <CardBody>
                   <img alt="none" src={data.file} className="image"></img>
                   <CardText>
-                    <p>{data.description}</p>
+                  {data.description}
+                    {data.company}
+                    <br />
+                    IS_SELECTED : {data.is_selected ? "TRUE" : "FALSE"}
                   </CardText>
-                  <p>{data.company}</p>
+                 
                 </CardBody>
                 {showForm && (
-                  <form onSubmit={update}>
+                  <form>
                     <button
                       onClick={(e) => {
-                        setFormPayload({
-                          ...formPayload,
-                          title: e.target.value
-                        })
+                        update(e)
                       }}
                       type="submit"
                     >

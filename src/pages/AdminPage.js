@@ -111,7 +111,7 @@ export default function AdminPage() {
       <h1>Example of posting data</h1>
       {loading && <Loader />}
       {showForm && (
-        <form onSubmit={postData2} >
+        <form onSubmit={postData} >
           <input
             type="text"
             placeholder="Titre"
